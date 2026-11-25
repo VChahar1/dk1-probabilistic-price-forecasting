@@ -18,7 +18,8 @@ from src.lear import design_matrix, lear_forecast, load_wide
 from src.lgbm import lgbm_forecast, load_long
 
 
-def main(a) -> None:
+def main(a: argparse.Namespace) -> None:
+    """Compare forecasts after withholding delivery-day renewables inputs."""
     path = f"data/processed/{a.zone}_dataset.parquet"
     dates = pd.date_range(a.test_start, a.test_end, freq="D")
     y = load_long(path)["price"]

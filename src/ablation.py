@@ -18,7 +18,8 @@ from src.lgbm import lgbm_forecast, load_long
 from src.pregate import pregate_inputs
 
 
-def main(a) -> None:
+def main(a: argparse.Namespace) -> None:
+    """Compare pre-gate forecast ablations using the supplied experiment options."""
     path = f"data/processed/{a.zone}_dataset.parquet"
     y, wx, res_pregate, _ = pregate_inputs(a.zone, verbose=False)
     eval_start = pd.Timestamp(a.eval_start)

@@ -103,7 +103,8 @@ def pregate_inputs(zone: str, verbose: bool = True):
     return y, wx, res_pregate, first_proxy
 
 
-def main(a) -> None:
+def main(a: argparse.Namespace) -> None:
+    """Run the pre-gate weather-proxy comparison and report its saved results."""
     path = f"data/processed/{a.zone}_dataset.parquet"
     y, wx, res_pregate, first_proxy = pregate_inputs(a.zone)
     eval_start = pd.Timestamp(a.eval_start)
