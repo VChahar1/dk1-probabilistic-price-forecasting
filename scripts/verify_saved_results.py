@@ -15,7 +15,8 @@ from src.lgbm import load_long
 from src.pregate import res_proxy
 
 
-def main(output):
+def main(output: str) -> None:
+    """Recompute metrics from local forecasts and write an audit report."""
     root = Path("data")
     fc = root / "forecasts"
     y = load_long(str(root / "processed/DK_1_dataset.parquet"))["price"]

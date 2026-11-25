@@ -20,6 +20,7 @@ def _save(obj, path: Path) -> None:
 
 
 def fetch_zone(zone: str, start: str, end: str, force: bool = False) -> None:
+    """Cache the requested ENTSO-E price, load and renewables series."""
     key = os.environ.get("ENTSOE_API_KEY")
     if not key:
         raise SystemExit(
