@@ -1,0 +1,27 @@
+# Raw, processed and cached market/weather data stay local.
+/data/
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*credentials*
+*.pem
+*.key
+# Environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.cache/
+# Large data/model archives
+*.parquet
+*.csv
+*.nc
+*.grib*
+*.pkl
+*.joblib
+*.zip
+*.tar*
+*.log

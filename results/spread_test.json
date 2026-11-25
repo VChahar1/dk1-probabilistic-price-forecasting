@@ -1,0 +1,694 @@
+{
+  "post": {
+    "size": {
+      "B0": {
+        "rows": 5087.0,
+        "pinball LGBM": 15.6702,
+        "pinball CQR": 15.6302,
+        "pinball clim": 15.3506,
+        "MAE median": 48.6251,
+        "MAE med7": 49.3507,
+        "MAE zero": 46.8227,
+        "cov90 LGBM": 88.4411,
+        "cov90 CQR": 89.5223,
+        "cov90 clim": 89.1095
+      },
+      "A0": {
+        "rows": 5087.0,
+        "pinball LGBM": 15.5036,
+        "pinball CQR": 15.4812,
+        "pinball clim": 15.3506,
+        "MAE median": 48.7063,
+        "MAE med7": 49.3507,
+        "MAE zero": 46.8227,
+        "cov90 LGBM": 89.6796,
+        "cov90 CQR": 89.7582,
+        "cov90 clim": 89.1095
+      },
+      "A1": {
+        "rows": 5087.0,
+        "pinball LGBM": 15.4126,
+        "pinball CQR": 15.3864,
+        "pinball clim": 15.3506,
+        "MAE median": 48.3285,
+        "MAE med7": 49.3507,
+        "MAE zero": 46.8227,
+        "cov90 LGBM": 88.9719,
+        "cov90 CQR": 89.8958,
+        "cov90 clim": 89.1095
+      },
+      "A1e": {
+        "rows": 2812.0,
+        "pinball LGBM": 15.3167,
+        "pinball CQR": 15.3064,
+        "pinball clim": 15.4375,
+        "MAE median": 47.5558,
+        "MAE med7": 48.6846,
+        "MAE zero": 46.2599,
+        "cov90 LGBM": 87.091,
+        "cov90 CQR": 90.256,
+        "cov90 clim": 88.229
+      },
+      "A2": {
+        "rows": 2812.0,
+        "pinball LGBM": 15.2489,
+        "pinball CQR": 15.2364,
+        "pinball clim": 15.4375,
+        "MAE median": 47.4501,
+        "MAE med7": 48.6846,
+        "MAE zero": 46.2599,
+        "cov90 LGBM": 86.771,
+        "cov90 CQR": 90.4694,
+        "cov90 clim": 88.229
+      },
+      "C1": {
+        "rows": 5087.0,
+        "pinball LGBM": 15.5475,
+        "pinball CQR": 15.5014,
+        "pinball clim": 15.3506,
+        "MAE median": 48.125,
+        "MAE med7": 49.3507,
+        "MAE zero": 46.8227,
+        "cov90 LGBM": 88.5394,
+        "cov90 CQR": 89.8172,
+        "cov90 clim": 89.1095
+      },
+      "C2": {
+        "rows": 2812.0,
+        "pinball LGBM": 15.3825,
+        "pinball CQR": 15.3646,
+        "pinball clim": 15.4375,
+        "MAE median": 47.1681,
+        "MAE med7": 48.6846,
+        "MAE zero": 46.2599,
+        "cov90 LGBM": 86.7354,
+        "cov90 CQR": 90.3983,
+        "cov90 clim": 88.229
+      }
+    },
+    "sign": {
+      "B0": {
+        "log loss": 0.6707,
+        "log loss bench": 0.6712,
+        "Brier": 0.2385,
+        "accuracy": 61.9815,
+        "acc. majority": 61.9815,
+        "share>0 %": 38.0185
+      },
+      "A0": {
+        "log loss": 0.6707,
+        "log loss bench": 0.6712,
+        "Brier": 0.2385,
+        "accuracy": 61.9815,
+        "acc. majority": 61.9815,
+        "share>0 %": 38.0185
+      },
+      "A1": {
+        "log loss": 0.6714,
+        "log loss bench": 0.6712,
+        "Brier": 0.2387,
+        "accuracy": 61.9815,
+        "acc. majority": 61.9815,
+        "share>0 %": 38.0185
+      },
+      "A1e": {
+        "log loss": 0.6641,
+        "log loss bench": 0.6702,
+        "Brier": 0.2354,
+        "accuracy": 62.3044,
+        "acc. majority": 62.5889,
+        "share>0 %": 37.4111
+      },
+      "A2": {
+        "log loss": 0.6629,
+        "log loss bench": 0.6702,
+        "Brier": 0.2348,
+        "accuracy": 62.1977,
+        "acc. majority": 62.5889,
+        "share>0 %": 37.4111
+      },
+      "C1": {
+        "log loss": 0.6713,
+        "log loss bench": 0.6712,
+        "Brier": 0.2387,
+        "accuracy": 61.9815,
+        "acc. majority": 61.9815,
+        "share>0 %": 38.0185
+      },
+      "C2": {
+        "log loss": 0.6628,
+        "log loss bench": 0.6702,
+        "Brier": 0.2348,
+        "accuracy": 62.1622,
+        "acc. majority": 62.5889,
+        "share>0 %": 37.4111
+      }
+    },
+    "dm": [
+      {
+        "test": "H1 evening revision, pinball",
+        "a": "A1",
+        "b": "A0",
+        "change_%": -0.6113443675680341,
+        "stat": -2.272997407305413,
+        "p": 0.011513168090343716,
+        "days": 212
+      },
+      {
+        "test": "H1 evening revision, MAE",
+        "a": "A1",
+        "b": "A0",
+        "change_%": -0.7743794996050601,
+        "stat": -1.8393211644498753,
+        "p": 0.03293398094328237,
+        "days": 212
+      },
+      {
+        "test": "H1 evening revision, log loss",
+        "a": "A1",
+        "b": "A0",
+        "change_%": 0.10162632660155602,
+        "stat": 0.6185468318861345,
+        "p": 0.7318925315069091,
+        "days": 212
+      },
+      {
+        "test": "H2 morning revision, pinball",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": -0.4534336175434417,
+        "stat": -1.3838036875342092,
+        "p": 0.08320928681425294,
+        "days": 212
+      },
+      {
+        "test": "H2 morning revision, MAE",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": -0.217399301901533,
+        "stat": -0.6654205263853297,
+        "p": 0.25289077987037833,
+        "days": 212
+      },
+      {
+        "test": "H2 morning revision, log loss",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": -0.18692580499063416,
+        "stat": -0.9041771943994843,
+        "p": 0.182950725447666,
+        "days": 212
+      },
+      {
+        "test": "B0 vs benchmark, pinball",
+        "a": "B0",
+        "b": "clim",
+        "change_%": 1.824221585297492,
+        "stat": 2.1084860711579196,
+        "p": 0.9825055168315213,
+        "days": 212
+      },
+      {
+        "test": "B0 vs benchmark, MAE",
+        "a": "B0",
+        "b": "med7",
+        "change_%": -1.4673670461891164,
+        "stat": -1.0045363588788863,
+        "p": 0.1575600775818765,
+        "days": 212
+      },
+      {
+        "test": "B0 vs benchmark, MAE",
+        "a": "B0",
+        "b": "zero",
+        "change_%": 3.854668526337557,
+        "stat": 2.3387808026139947,
+        "p": 0.9903266096198244,
+        "days": 212
+      },
+      {
+        "test": "B0 vs benchmark, log loss",
+        "a": "B0",
+        "b": "trail",
+        "change_%": -0.0701604224863317,
+        "stat": -0.1034340409103613,
+        "p": 0.4588092481430343,
+        "days": 212
+      },
+      {
+        "test": "A0 vs benchmark, pinball",
+        "a": "A0",
+        "b": "clim",
+        "change_%": 0.8542773171432705,
+        "stat": 0.866871991089754,
+        "p": 0.8069939242313278,
+        "days": 212
+      },
+      {
+        "test": "A0 vs benchmark, MAE",
+        "a": "A0",
+        "b": "med7",
+        "change_%": -1.3009338636689738,
+        "stat": -0.7947091277924802,
+        "p": 0.21339136074878068,
+        "days": 212
+      },
+      {
+        "test": "A0 vs benchmark, MAE",
+        "a": "A0",
+        "b": "zero",
+        "change_%": 4.030091251624079,
+        "stat": 2.1513634605428598,
+        "p": 0.9842762385517498,
+        "days": 212
+      },
+      {
+        "test": "A0 vs benchmark, log loss",
+        "a": "A0",
+        "b": "trail",
+        "change_%": -0.06751811956674514,
+        "stat": -0.09899179027600476,
+        "p": 0.4605723942490255,
+        "days": 212
+      },
+      {
+        "test": "A1 vs benchmark, pinball",
+        "a": "A1",
+        "b": "clim",
+        "change_%": 0.23771037331346,
+        "stat": 0.26571585025020916,
+        "p": 0.6047709723215817,
+        "days": 212
+      },
+      {
+        "test": "A1 vs benchmark, MAE",
+        "a": "A1",
+        "b": "med7",
+        "change_%": -2.065239198130364,
+        "stat": -1.320851894730458,
+        "p": 0.09327537615373088,
+        "days": 212
+      },
+      {
+        "test": "A1 vs benchmark, MAE",
+        "a": "A1",
+        "b": "zero",
+        "change_%": 3.224503551551061,
+        "stat": 1.7975477836019802,
+        "p": 0.9638756502990495,
+        "days": 212
+      },
+      {
+        "test": "A1 vs benchmark, log loss",
+        "a": "A1",
+        "b": "trail",
+        "change_%": 0.0340395908501101,
+        "stat": 0.04593706788303436,
+        "p": 0.5183197952743602,
+        "days": 212
+      },
+      {
+        "test": "A2 vs benchmark, pinball",
+        "a": "A2",
+        "b": "clim",
+        "change_%": -1.3181985972304355,
+        "stat": -1.223138271402561,
+        "p": 0.11063873782219691,
+        "days": 212
+      },
+      {
+        "test": "A2 vs benchmark, MAE",
+        "a": "A2",
+        "b": "med7",
+        "change_%": -2.535817132000606,
+        "stat": -1.8934151018802967,
+        "p": 0.029151344328715936,
+        "days": 212
+      },
+      {
+        "test": "A2 vs benchmark, MAE",
+        "a": "A2",
+        "b": "zero",
+        "change_%": 2.5524914075779837,
+        "stat": 1.5307545910506004,
+        "p": 0.9370849719305958,
+        "days": 212
+      },
+      {
+        "test": "A2 vs benchmark, log loss",
+        "a": "A2",
+        "b": "trail",
+        "change_%": -1.0720966299993195,
+        "stat": -1.4366269068034654,
+        "p": 0.07541201698900608,
+        "days": 212
+      }
+    ]
+  },
+  "pre": {
+    "size": {
+      "B0": {
+        "rows": 384.0,
+        "pinball LGBM": 14.3802,
+        "pinball CQR": 13.867,
+        "pinball clim": 13.8153,
+        "MAE median": 37.3998,
+        "MAE med7": 40.2449,
+        "MAE zero": 35.9732,
+        "cov90 LGBM": 76.3021,
+        "cov90 CQR": 90.1042,
+        "cov90 clim": 87.7604
+      },
+      "A0": {
+        "rows": 384.0,
+        "pinball LGBM": 14.538,
+        "pinball CQR": 13.8446,
+        "pinball clim": 13.8153,
+        "MAE median": 36.9229,
+        "MAE med7": 40.2449,
+        "MAE zero": 35.9732,
+        "cov90 LGBM": 69.2708,
+        "cov90 CQR": 89.3229,
+        "cov90 clim": 87.7604
+      },
+      "A1": {
+        "rows": 384.0,
+        "pinball LGBM": 14.5502,
+        "pinball CQR": 13.8468,
+        "pinball clim": 13.8153,
+        "MAE median": 36.8881,
+        "MAE med7": 40.2449,
+        "MAE zero": 35.9732,
+        "cov90 LGBM": 69.0104,
+        "cov90 CQR": 88.8021,
+        "cov90 clim": 87.7604
+      },
+      "A1e": {
+        "rows": 224.0,
+        "pinball LGBM": 14.444,
+        "pinball CQR": 13.277,
+        "pinball clim": 13.0667,
+        "MAE median": 33.3932,
+        "MAE med7": 38.2193,
+        "MAE zero": 33.0755,
+        "cov90 LGBM": 62.9464,
+        "cov90 CQR": 89.2857,
+        "cov90 clim": 88.3929
+      },
+      "A2": {
+        "rows": 224.0,
+        "pinball LGBM": 14.5336,
+        "pinball CQR": 13.3765,
+        "pinball clim": 13.0667,
+        "MAE median": 33.42,
+        "MAE med7": 38.2193,
+        "MAE zero": 33.0755,
+        "cov90 LGBM": 64.2857,
+        "cov90 CQR": 89.7321,
+        "cov90 clim": 88.3929
+      },
+      "C1": {
+        "rows": 384.0,
+        "pinball LGBM": 14.2557,
+        "pinball CQR": 13.7291,
+        "pinball clim": 13.8153,
+        "MAE median": 36.6886,
+        "MAE med7": 40.2449,
+        "MAE zero": 35.9732,
+        "cov90 LGBM": 76.3021,
+        "cov90 CQR": 89.0625,
+        "cov90 clim": 87.7604
+      },
+      "C2": {
+        "rows": 224.0,
+        "pinball LGBM": 14.5428,
+        "pinball CQR": 13.3276,
+        "pinball clim": 13.0667,
+        "MAE median": 33.3239,
+        "MAE med7": 38.2193,
+        "MAE zero": 33.0755,
+        "cov90 LGBM": 65.1786,
+        "cov90 CQR": 90.1786,
+        "cov90 clim": 88.3929
+      }
+    },
+    "sign": {
+      "B0": {
+        "log loss": 0.5509,
+        "log loss bench": 0.5051,
+        "Brier": 0.1798,
+        "accuracy": 78.6458,
+        "acc. majority": 78.6458,
+        "share>0 %": 21.3542
+      },
+      "A0": {
+        "log loss": 0.5498,
+        "log loss bench": 0.5051,
+        "Brier": 0.1795,
+        "accuracy": 78.6458,
+        "acc. majority": 78.6458,
+        "share>0 %": 21.3542
+      },
+      "A1": {
+        "log loss": 0.5453,
+        "log loss bench": 0.5051,
+        "Brier": 0.1776,
+        "accuracy": 78.3854,
+        "acc. majority": 78.6458,
+        "share>0 %": 21.3542
+      },
+      "A1e": {
+        "log loss": 0.5089,
+        "log loss bench": 0.4774,
+        "Brier": 0.1632,
+        "accuracy": 79.0179,
+        "acc. majority": 80.3571,
+        "share>0 %": 19.6429
+      },
+      "A2": {
+        "log loss": 0.5164,
+        "log loss bench": 0.4774,
+        "Brier": 0.1672,
+        "accuracy": 77.6786,
+        "acc. majority": 80.3571,
+        "share>0 %": 19.6429
+      },
+      "C1": {
+        "log loss": 0.5474,
+        "log loss bench": 0.5051,
+        "Brier": 0.1782,
+        "accuracy": 78.3854,
+        "acc. majority": 78.6458,
+        "share>0 %": 21.3542
+      },
+      "C2": {
+        "log loss": 0.5197,
+        "log loss bench": 0.4774,
+        "Brier": 0.1683,
+        "accuracy": 78.125,
+        "acc. majority": 80.3571,
+        "share>0 %": 19.6429
+      }
+    },
+    "dm": [
+      {
+        "test": "H1 evening revision, pinball",
+        "a": "A1",
+        "b": "A0",
+        "change_%": 0.016037933732460097,
+        "stat": 0.036332983307300455,
+        "p": 0.5144915747908935,
+        "days": 16
+      },
+      {
+        "test": "H1 evening revision, MAE",
+        "a": "A1",
+        "b": "A0",
+        "change_%": -0.09433239311643637,
+        "stat": -0.13516075642771658,
+        "p": 0.4462423870727128,
+        "days": 16
+      },
+      {
+        "test": "H1 evening revision, log loss",
+        "a": "A1",
+        "b": "A0",
+        "change_%": -0.8158295696920836,
+        "stat": -1.479325519374612,
+        "p": 0.06952666778888482,
+        "days": 16
+      },
+      {
+        "test": "H2 morning revision, pinball",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": 0.7490100083897389,
+        "stat": 2.093823618327628,
+        "p": 0.9818621522972201,
+        "days": 16
+      },
+      {
+        "test": "H2 morning revision, MAE",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": 0.08034599676502996,
+        "stat": 0.7733236119749136,
+        "p": 0.7803345574239463,
+        "days": 16
+      },
+      {
+        "test": "H2 morning revision, log loss",
+        "a": "A2",
+        "b": "A1e",
+        "change_%": 1.46248327799261,
+        "stat": 0.6441586126107217,
+        "p": 0.7402637071174312,
+        "days": 16
+      },
+      {
+        "test": "B0 vs benchmark, pinball",
+        "a": "B0",
+        "b": "clim",
+        "change_%": 0.3744983117626166,
+        "stat": 0.31567395639510887,
+        "p": 0.6238750017874309,
+        "days": 16
+      },
+      {
+        "test": "B0 vs benchmark, MAE",
+        "a": "B0",
+        "b": "med7",
+        "change_%": -7.069428262700972,
+        "stat": -1.9861276296645052,
+        "p": 0.023509577029134265,
+        "days": 16
+      },
+      {
+        "test": "B0 vs benchmark, MAE",
+        "a": "B0",
+        "b": "zero",
+        "change_%": 3.965761783256583,
+        "stat": 3.593892426384046,
+        "p": 0.9998371128087956,
+        "days": 16
+      },
+      {
+        "test": "B0 vs benchmark, log loss",
+        "a": "B0",
+        "b": "trail",
+        "change_%": 9.053192098889129,
+        "stat": 2.839981587453411,
+        "p": 0.9977441931080053,
+        "days": 16
+      },
+      {
+        "test": "A0 vs benchmark, pinball",
+        "a": "A0",
+        "b": "clim",
+        "change_%": 0.21181393338696175,
+        "stat": 0.1803446118306929,
+        "p": 0.5715589826958744,
+        "days": 16
+      },
+      {
+        "test": "A0 vs benchmark, MAE",
+        "a": "A0",
+        "b": "med7",
+        "change_%": -8.254350163206858,
+        "stat": -2.2423790291753685,
+        "p": 0.012468442988584632,
+        "days": 16
+      },
+      {
+        "test": "A0 vs benchmark, MAE",
+        "a": "A0",
+        "b": "zero",
+        "change_%": 2.6401344279444627,
+        "stat": 2.2180035923878982,
+        "p": 0.986722706261736,
+        "days": 16
+      },
+      {
+        "test": "A0 vs benchmark, log loss",
+        "a": "A0",
+        "b": "trail",
+        "change_%": 8.831483930623962,
+        "stat": 2.8444691294203595,
+        "p": 0.9977757251834767,
+        "days": 16
+      },
+      {
+        "test": "A1 vs benchmark, pinball",
+        "a": "A1",
+        "b": "clim",
+        "change_%": 0.22788583769770554,
+        "stat": 0.23432049628620735,
+        "p": 0.592631912467298,
+        "days": 16
+      },
+      {
+        "test": "A1 vs benchmark, MAE",
+        "a": "A1",
+        "b": "med7",
+        "change_%": -8.340896030278133,
+        "stat": -2.1536413317587537,
+        "p": 0.01563415515289843,
+        "days": 16
+      },
+      {
+        "test": "A1 vs benchmark, MAE",
+        "a": "A1",
+        "b": "zero",
+        "change_%": 2.543311532840642,
+        "stat": 3.216974997468883,
+        "p": 0.9993522505599823,
+        "days": 16
+      },
+      {
+        "test": "A1 vs benchmark, log loss",
+        "a": "A1",
+        "b": "trail",
+        "change_%": 7.943604503583246,
+        "stat": 2.818435659524397,
+        "p": 0.9975870859125953,
+        "days": 16
+      },
+      {
+        "test": "A2 vs benchmark, pinball",
+        "a": "A2",
+        "b": "clim",
+        "change_%": 2.3707397498237137,
+        "stat": 2.4196402620016846,
+        "p": 0.9922320660408852,
+        "days": 16
+      },
+      {
+        "test": "A2 vs benchmark, MAE",
+        "a": "A2",
+        "b": "med7",
+        "change_%": -12.557303746075643,
+        "stat": -2.2533610961834905,
+        "p": 0.012118195199227797,
+        "days": 16
+      },
+      {
+        "test": "A2 vs benchmark, MAE",
+        "a": "A2",
+        "b": "zero",
+        "change_%": 1.041622881147064,
+        "stat": 2.947138027990877,
+        "p": 0.9983963499721651,
+        "days": 16
+      },
+      {
+        "test": "A2 vs benchmark, log loss",
+        "a": "A2",
+        "b": "trail",
+        "change_%": 8.158766749255797,
+        "stat": 2.58003062860009,
+        "p": 0.9950604223703808,
+        "days": 16
+      }
+    ]
+  }
+}

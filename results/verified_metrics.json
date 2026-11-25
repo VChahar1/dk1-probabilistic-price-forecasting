@@ -1,0 +1,129 @@
+{
+  "verification": "Metrics recomputed from saved local forecasts; models were not refitted.",
+  "information_set_comparison": {
+    "start": "2025-01-01",
+    "end": "2026-08-31",
+    "days": 577,
+    "hours": 13848,
+    "naive_mae_eur_mwh": 31.22330120015526,
+    "models": {
+      "entsoe": {
+        "mae_eur_mwh": 16.755590574436308,
+        "relative_mae": 0.5366373807505336,
+        "improvement_over_naive_percent": 46.33626192494664,
+        "pinball_eur_mwh": 5.0986564722532615,
+        "cov50_%": 53.4734257654535,
+        "width50": 27.50027427180917,
+        "cov80_%": 82.56065857885615,
+        "width80": 55.57839230413686,
+        "cov90_%": 91.17562102830735,
+        "width90": 75.48739461210772
+      },
+      "pregate": {
+        "mae_eur_mwh": 16.219196296128814,
+        "relative_mae": 0.5194580865154695,
+        "improvement_over_naive_percent": 48.054191348453045,
+        "pinball_eur_mwh": 4.9346402302920875,
+        "cov50_%": 53.523974581166954,
+        "width50": 26.873760313632552,
+        "cov80_%": 82.50288850375506,
+        "width80": 53.62473277008888,
+        "cov90_%": 91.19728480647025,
+        "width90": 73.40347380758939
+      },
+      "no_res": {
+        "mae_eur_mwh": 19.270008655171658,
+        "relative_mae": 0.6171675612275053,
+        "improvement_over_naive_percent": 38.283243877249475,
+        "pinball_eur_mwh": 5.888730252656658,
+        "cov50_%": 54.145002888503754,
+        "width50": 31.13622031299352,
+        "cov80_%": 82.36568457538995,
+        "width80": 63.539474275074106,
+        "cov90_%": 91.2261698440208,
+        "width90": 87.04860939940868
+      }
+    },
+    "dm_pregate_vs_entsoe_ensemble_pinball": {
+      "statistic": -4.644768391901053,
+      "one_sided_pvalue": 1.7022909108193858e-06,
+      "newey_west_lag_days": 7
+    }
+  },
+  "interval_calibration_comparison": {
+    "start": "2024-10-27",
+    "end": "2026-08-31",
+    "days": 649,
+    "hours": 15576,
+    "raw_lightgbm": {
+      "cov50_%": 35.29789419619928,
+      "width50": 21.61913064045046,
+      "cov80_%": 62.66692347200822,
+      "width80": 43.63268078270548,
+      "cov90_%": 75.84745762711864,
+      "width90": 59.99162389212975
+    },
+    "conformal_lightgbm": {
+      "cov50_%": 50.089881869542886,
+      "width50": 29.25025625225856,
+      "cov80_%": 79.76373908577298,
+      "width80": 59.14423872413671,
+      "cov90_%": 89.77914740626605,
+      "width90": 80.89418260428104
+    }
+  },
+  "weather_to_power_proxy": {
+    "target": "ENTSO-E renewables forecast, not observed power generation",
+    "start": "2024-06-01",
+    "end": "2026-08-31",
+    "days": 815,
+    "hours": 19416,
+    "r_squared": 0.880545634737237,
+    "mae_mw": 255.628500162147
+  },
+  "local_input_sha256": {
+    "data/forecasts/DK_1_ens.parquet": "85c31526fdc41add6ae60dcc68e7cf5f9445a367433f3fac4847bb4ea8bd8b71",
+    "data/forecasts/DK_1_ens_nores.parquet": "a088a9d3dc393697b576828faeee8e91b4c3b00a6ed7899e4ba273d7d8798f17",
+    "data/forecasts/DK_1_ens_pregate.parquet": "dfa962db1ad6505b31a728f9672720318be301a780aeb92658c5f6608bae20e9",
+    "data/forecasts/DK_1_lear.parquet": "2c48daeb747e04c1d2dd39ec5134f1d7837c7dc1c3f75364162b65024984bbce",
+    "data/forecasts/DK_1_lear_eq.parquet": "401a131a8fa79121c1f5e77385a00abf9386569fd259b782816acdf779932f35",
+    "data/forecasts/DK_1_lear_nores.parquet": "f14ea622abd65d52d9661dc3647f8b10b63bcb25048fd2c57761678440a9fbb9",
+    "data/forecasts/DK_1_lear_pregate.parquet": "e969196c78245717296bea196de8514cb273751f36150f452b6584e30a9aed5a",
+    "data/forecasts/DK_1_lear_pregate_ext.parquet": "09d16c2e6252233d7119a5bb32722852bf47a60ab4dcbff399d6db09e85372d1",
+    "data/forecasts/DK_1_lgbm_cqr.parquet": "9758e1ada74670f25468816985fc0a16105bdcdddc32b8ab74770db44efcbfbd",
+    "data/forecasts/DK_1_lgbm_q.parquet": "aa58b0bdd33d22c7c75fee438e9ed10419dbc9b2b03beefdf07fb14b51c2ef4f",
+    "data/forecasts/DK_1_lgbm_q_nores.parquet": "5a174024069f2f7f29ca7bee1370891b63adea22d879e954be1e9bcb23298f42",
+    "data/forecasts/DK_1_lgbm_q_pregate.parquet": "2debfa4e17dc41bbdcc5654a5a1fbbd6068fd1787ad077793be6ffce155fa23c",
+    "data/forecasts/DK_1_lgbm_q_pregate_ext.parquet": "14fcc5c9e998b848fbf41e6e265a8deeb22a385e11ba6f4d227a3f848894feb2",
+    "data/forecasts/DK_1_lgbm_q_pregate_proxyonly.parquet": "b3838a4caa2ccb0027cac8b2180732485f7802b06789d55944ae1c161f23425a",
+    "data/forecasts/DK_1_naive.parquet": "966370d3f608328b22d66c74bac239914e113eb3653c52026970667dfe0da5da",
+    "data/forecasts/spread/benchmarks.parquet": "418a3682de9be1bc3169d7139b145895c54a8d1de58c1ab67ad491f243a4d246",
+    "data/forecasts/spread/cqr_A0.parquet": "f07f6f0695b0d7863387d10b464407ffe6cf506d0fb1960b63783ea89d406da8",
+    "data/forecasts/spread/cqr_A1.parquet": "206cf651053ff80faa732efbc1cb23f7e5ce3db163f45c136f66ee9bb718bd85",
+    "data/forecasts/spread/cqr_A1e.parquet": "50cd9f310c072741974ed3c3e74f5ea0edb64926e9be1353609f2927db50979d",
+    "data/forecasts/spread/cqr_A2.parquet": "ea6ad46d8f0e94a1e1f5dbb2232aca3b6881055d691a830422d129b0767fa1cc",
+    "data/forecasts/spread/cqr_B0.parquet": "e91aa427aed5d25398496201ee74a85570788ce0ef5a48a362ac87d3fe3ccc6e",
+    "data/forecasts/spread/cqr_C1.parquet": "db05f3d1431c1c638042ad2adfa47657d37ffe90970da6106d2a737d1176047f",
+    "data/forecasts/spread/cqr_C2.parquet": "4205eb0a2ef27b9168a87bcef7ec3fa3fd5d1df70affa3f08a8eaf8ace0b14c2",
+    "data/forecasts/spread/lgbm_A0.parquet": "a9285e6a6f4c1f4c6fe5d4ed5175f7569b51f0b8609a83fe0c1f143360c53473",
+    "data/forecasts/spread/lgbm_A1.parquet": "64f7d6271000b2146b9fbb0960d3d13d1f7ca33101b869a5667b38941ff31ae9",
+    "data/forecasts/spread/lgbm_A1e.parquet": "77f31492a72f4f631bd6ccc69cab9b937f2825a794fbe69aa32388c5eab97723",
+    "data/forecasts/spread/lgbm_A2.parquet": "805e920ca08a65708d3c5330fd1579d3c26667d4bc72010c34d4986197bb13c8",
+    "data/forecasts/spread/lgbm_B0.parquet": "d40dd274bf448b77ad9979e2b3a143b0ad333df92d5ed71bef4f16f3bb9bdfc6",
+    "data/forecasts/spread/lgbm_C1.parquet": "06b16e11e8869e14a17420659dec2640b7e850da9416efee6cf424fc2bb2dc95",
+    "data/forecasts/spread/lgbm_C2.parquet": "9c86fe7ea776d51b910474d868270ec7bc9c4d09b0b3c63b1b13c4b05b514312",
+    "data/forecasts/spread/logit_A0.parquet": "c5592fd7de12c25eee385634b2717cf4e9e6ed562e84dff88e9a1edecfc18e18",
+    "data/forecasts/spread/logit_A1.parquet": "dce2a18b9f3b3e1f8d733c382ac59d472219900bd2d9cb8aae271c92ab6b5423",
+    "data/forecasts/spread/logit_A1e.parquet": "3234aea6ff05d97848f1fdba2c8b5c344e5e0e094c2ad9e5f72e5f6174aad3d7",
+    "data/forecasts/spread/logit_A2.parquet": "0f0abe0a9f8007143fdc9f200afa98e4116886d96bc47472f381bd74cbc57530",
+    "data/forecasts/spread/logit_B0.parquet": "1824def17a694ce6a5b564d95ef223a1b60d9a8a2d75e98cbc0f7808bc101746",
+    "data/forecasts/spread/logit_C1.parquet": "d26c8f115812c34b5458a1ffa06d30c2226f85e01d653a48adbf0fd31b363eab",
+    "data/forecasts/spread/logit_C2.parquet": "af98afecd3dc4b07cb115ee466f2d88c4d2d7304438f2b123daf58b3585989d9",
+    "data/processed/DK_1_dataset.parquet": "27cc6226c155e536a15837014f0047c1c7d96b14205e1033fc9e6a53016375be",
+    "data/processed/DK_1_infosets.parquet": "15141fccfff18fa52dcced356753ca3574c49cc65ddbf97410172e62c1a9c78c",
+    "data/processed/DK_1_revisions.parquet": "12ede218960cc325656eb1ebe68f1dbf68cb4ccd6942a8d726babada66023086",
+    "data/processed/DK_1_spread_15min.parquet": "1066a53fb1a156f4db7d6a3700ce7697e4866e84a5a511fc7d522ac6c04a1d7a",
+    "data/processed/DK_1_spread_hourly.parquet": "1d841755b14a80857006f74569112c6e5271f10d8e51fddb5f13e8636f5e7b81",
+    "data/processed/DK_1_weather.parquet": "b2efd88978a27c85eb35133cdc2803658dbee6a62911f2ee37fa5233e8ebbcbf"
+  }
+}
