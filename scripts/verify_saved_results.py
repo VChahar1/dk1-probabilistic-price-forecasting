@@ -1,4 +1,5 @@
 """Recompute documented metrics from locally cached forecasts without refitting models."""
+
 import argparse
 import hashlib
 import json
@@ -51,11 +52,16 @@ def main(output):
     )
     dates = idx.get_level_values("date")
     information_sets = {
-        "start": str(dates.min().date()), "end": str(dates.max().date()),
-        "days": int(dates.nunique()), "hours": len(idx),
-        "naive_mae_eur_mwh": baseline, "models": compare,
+        "start": str(dates.min().date()),
+        "end": str(dates.max().date()),
+        "days": int(dates.nunique()),
+        "hours": len(idx),
+        "naive_mae_eur_mwh": baseline,
+        "models": compare,
         "dm_pregate_vs_entsoe_ensemble_pinball": {
-            "statistic": stat, "one_sided_pvalue": pvalue, "newey_west_lag_days": 7,
+            "statistic": stat,
+            "one_sided_pvalue": pvalue,
+            "newey_west_lag_days": 7,
         },
     }
 
@@ -66,8 +72,10 @@ def main(output):
     yy = y.loc[idx]
     dates = idx.get_level_values("date")
     coverage = {
-        "start": str(dates.min().date()), "end": str(dates.max().date()),
-        "days": int(dates.nunique()), "hours": len(idx),
+        "start": str(dates.min().date()),
+        "end": str(dates.max().date()),
+        "days": int(dates.nunique()),
+        "hours": len(idx),
         "raw_lightgbm": interval_stats(yy.to_numpy(), m["raw"].loc[idx]),
         "conformal_lightgbm": interval_stats(yy.to_numpy(), m["cqr"].loc[idx]),
     }
@@ -83,9 +91,13 @@ def main(output):
     dates = joined.index.get_level_values("date")
     weather = {
         "target": "ENTSO-E renewables forecast, not observed power generation",
-        "start": str(dates.min().date()), "end": str(dates.max().date()),
-        "days": int(dates.nunique()), "hours": len(joined),
-        "r_squared": float(1 - (error ** 2).sum() / ((target - target.mean()) ** 2).sum()),
+        "start": str(dates.min().date()),
+        "end": str(dates.max().date()),
+        "days": int(dates.nunique()),
+        "hours": len(joined),
+        "r_squared": float(
+            1 - (error**2).sum() / ((target - target.mean()) ** 2).sum()
+        ),
         "mae_mw": float(error.abs().mean()),
     }
     sources = {}
@@ -100,7 +112,11 @@ def main(output):
     }
     result = json.dumps(report, indent=2, allow_nan=False) + "\n"
     Path(output).write_text(result)
-    print(json.dumps({k: v for k, v in report.items() if k != "local_input_sha256"}, indent=2))
+    print(
+        json.dumps(
+            {k: v for k, v in report.items() if k != "local_input_sha256"}, indent=2
+        )
+    )
 
 
 if __name__ == "__main__":
