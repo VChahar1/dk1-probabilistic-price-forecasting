@@ -1,12 +1,5 @@
-"""
-Download and cache raw ENTSO-E data for day-ahead price forecasting.
+"Download and cache raw ENTSO-E data for day-ahead price forecasting."
 
-Usage:
-    export ENTSOE_API_KEY=your_token
-    python -m src.data --zone DK_1 --start 2019-01-01 --end 2026-09-01
-
-Raw series are cached to data/raw/<zone>_<name>.parquet (UTC index, native resolution).
-"""
 import argparse
 import os
 from pathlib import Path
@@ -27,21 +20,23 @@ def _save(obj, path: Path) -> None:
 
 
 def fetch_zone(zone: str, start: str, end: str, force: bool = False) -> None:
+    """Cache the requested ENTSO-E price, load and renewables series."""
     key = os.environ.get("ENTSOE_API_KEY")
     if not key:
-        raise SystemExit("Set ENTSOE_API_KEY (free token: register on transparency.entsoe.eu, "
-                         "then email transparency@entsoe.eu asking for RESTful API access).")
+        raise SystemExit(
+            "Set ENTSOE_API_KEY (free token: register on transparency.entsoe.eu, "
+            "then email transparency@entsoe.eu asking for RESTful API access)."
+        )
     client = EntsoePandasClient(api_key=key)
     tz = lookup_area(zone).tz
     t0, t1 = pd.Timestamp(start, tz=tz), pd.Timestamp(end, tz=tz)
     RAW_DIR.mkdir(parents=True, exist_ok=True)
 
     jobs = {
-        # target: SDAC day-ahead price (hourly before Oct 2025, 15-min after)
-        "price": lambda: client.query_day_ahead_prices(zone, start=t0, end=t1).rename("price"),
-        # day-ahead total load forecast (column 'Forecasted Load')
+        "price": lambda: client.query_day_ahead_prices(zone, start=t0, end=t1).rename(
+            "price"
+        ),
         "load_fc": lambda: client.query_load_forecast(zone, start=t0, end=t1),
-        # day-ahead wind & solar generation forecasts (Solar / Wind Onshore / Wind Offshore)
         "res_fc": lambda: client.query_wind_and_solar_forecast(zone, start=t0, end=t1),
     }
     for name, job in jobs.items():

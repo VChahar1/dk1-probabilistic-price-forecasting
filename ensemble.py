@@ -10,8 +10,15 @@ naive = wide_to_long(pd.read_parquet("data/forecasts/DK_1_naive.parquet"), "naiv
 eq = lear_eq(lear, y.reindex(lear.index), 56)
 
 idx = eq.dropna().index.intersection(cq.dropna().index)
-ens = (eq.loc[idx] + cq.loc[idx]) / 2          # quantile averaging
+ens = (eq.loc[idx] + cq.loc[idx]) / 2
 
-report(y.loc[fc.index],
-       {"naive": naive, "lear": lear, "lgbm_median": fc["q0.50"], "ens_median": ens["q0.50"]},
-       {"LEAR-EQ": eq, "LGBM": fc, "LGBM-CQR": cq, "ENS": ens})
+report(
+    y.loc[fc.index],
+    {
+        "naive": naive,
+        "lear": lear,
+        "lgbm_median": fc["q0.50"],
+        "ens_median": ens["q0.50"],
+    },
+    {"LEAR-EQ": eq, "LGBM": fc, "LGBM-CQR": cq, "ENS": ens},
+)

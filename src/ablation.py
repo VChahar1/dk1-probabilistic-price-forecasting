@@ -1,17 +1,5 @@
-"""
-Ablation: where does the pre-gate improvement come from?
+"Ablation: where does the pre-gate improvement come from?"
 
-  A  pre-gate LightGBM  = renewables proxy + raw ECMWF weather columns   (saved by src.pregate)
-  B  proxy-only LightGBM = renewables proxy, NO raw weather columns      (fitted here)
-
-Both use the same pre-gate LEAR, so the ensembles differ only in the LightGBM inputs.
-If B is about as good as A, the gain comes from the better renewables forecast;
-if A is clearly better, the extra weather variables (temperature, onshore/offshore split)
-add information of their own.
-
-Usage (after src.pregate):
-    python -m src.ablation --zone DK_1        # ~7 min
-"""
 import argparse
 import time
 
@@ -19,26 +7,40 @@ import numpy as np
 import pandas as pd
 
 from src.dm import daily_abs_loss, daily_pinball, dm_test
-from src.evaluate_prob import FC_DIR, INTERVALS, build_prob_models, pinball, wide_to_long
+from src.evaluate_prob import (
+    FC_DIR,
+    INTERVALS,
+    build_prob_models,
+    pinball,
+    wide_to_long,
+)
 from src.lgbm import lgbm_forecast, load_long
 from src.pregate import pregate_inputs
 
 
-def main(a) -> None:
+def main(a: argparse.Namespace) -> None:
+    """Compare pre-gate forecast ablations using the supplied experiment options."""
     path = f"data/processed/{a.zone}_dataset.parquet"
     y, wx, res_pregate, _ = pregate_inputs(a.zone, verbose=False)
     eval_start = pd.Timestamp(a.eval_start)
-    dates = pd.date_range(eval_start - pd.Timedelta(days=a.cal_days), a.eval_end, freq="D")
+    dates = pd.date_range(
+        eval_start - pd.Timedelta(days=a.cal_days), a.eval_end, freq="D"
+    )
 
     t0 = time.time()
-    lgbm_b, imp = lgbm_forecast(load_long(path, res_override=res_pregate), dates,
-                                a.window, 7, a.n_jobs)
+    lgbm_b, imp = lgbm_forecast(
+        load_long(path, res_override=res_pregate), dates, a.window, 7, a.n_jobs
+    )
     print(f"LightGBM (proxy only) done in {(time.time() - t0) / 60:.1f} min")
     lgbm_b.to_parquet(FC_DIR / f"{a.zone}_lgbm_q_pregate_proxyonly.parquet")
 
-    lear = wide_to_long(pd.read_parquet(FC_DIR / f"{a.zone}_lear_pregate.parquet"), "lear")
+    lear = wide_to_long(
+        pd.read_parquet(FC_DIR / f"{a.zone}_lear_pregate.parquet"), "lear"
+    )
     variants = {
-        "A: proxy + weather": pd.read_parquet(FC_DIR / f"{a.zone}_lgbm_q_pregate.parquet"),
+        "A: proxy + weather": pd.read_parquet(
+            FC_DIR / f"{a.zone}_lgbm_q_pregate.parquet"
+        ),
         "B: proxy only": lgbm_b,
     }
     ens = {k: build_prob_models(y, lear, v, a.cal_days)[2] for k, v in variants.items()}
@@ -46,7 +48,9 @@ def main(a) -> None:
     idx = y.dropna().index
     idx = idx[idx.get_level_values("date") >= eval_start]
     for k in variants:
-        idx = idx.intersection(variants[k].dropna().index).intersection(ens[k].dropna().index)
+        idx = idx.intersection(variants[k].dropna().index).intersection(
+            ens[k].dropna().index
+        )
     yv = y.loc[idx]
     dd = idx.get_level_values("date")
     print(f"\nEvaluation: {dd.nunique()} days ({dd.min().date()} -> {dd.max().date()})")
@@ -67,7 +71,10 @@ def main(a) -> None:
 
     A, B = variants
     for label, loss in [
-        ("LGBM median MAE", lambda k: daily_abs_loss(yv, variants[k].loc[idx, "q0.50"])),
+        (
+            "LGBM median MAE",
+            lambda k: daily_abs_loss(yv, variants[k].loc[idx, "q0.50"]),
+        ),
         ("ENS pinball", lambda k: daily_pinball(yv, ens[k].loc[idx])),
     ]:
         for x, z in [(A, B), (B, A)]:

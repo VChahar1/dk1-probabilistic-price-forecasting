@@ -1,35 +1,25 @@
-"""
-Benchmarks for day-ahead price forecasting (Lago et al., 2021, "Forecasting day-ahead
-electricity prices: A review of state-of-the-art algorithms, best practices and an
-open-access benchmark").
+'Benchmarks for day-ahead price forecasting (Lago et al., 2021, "Forecasting day-ahead electricity prices: A review of state-of-the-art algorithms, best practices and an'
 
-  * naive: Mon/Sat/Sun -> same hour last week; Tue-Fri -> same hour yesterday
-  * LEAR : Lasso-Estimated AutoRegressive model, one model per hour, recalibrated on
-           rolling windows, asinh variance-stabilising transform, ensemble over windows.
-
-All inputs use the daily "wide" format: index = delivery date, columns = hours 0..23.
-"""
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 from sklearn.linear_model import LassoLarsIC
 
-PRICE_LAGS = (1, 2, 3, 7)          # days: all known before gate closure on D-1
-EXOG = ("load_fc", "res_fc")       # day-ahead forecasts for D
-EXOG_LAGS = (0, 1, 7)              # forecast for D, and the forecasts that were made for D-1, D-7
+PRICE_LAGS = (1, 2, 3, 7)
+EXOG = ("load_fc", "res_fc")
+EXOG_LAGS = (0, 1, 7)
 RES_COLS = ["solar_fc", "wind_on_fc", "wind_off_fc"]
 
 
-# ----------------------------------------------------------------------------- data
 def load_wide(path: str, max_gap_hours: int = 6) -> dict[str, pd.DataFrame]:
     """Long (date, hour) dataset -> dict of daily wide frames on a gap-free daily index."""
     df = pd.read_parquet(path)
-    # strict renewables total: missing if ANY component is missing (no silent under-count)
+
     df["res_fc"] = df[RES_COLS].sum(axis=1, min_count=len(RES_COLS))
     wide = {}
     for col in ("price", *EXOG):
         s = df[col].copy()
-        if col != "price":  # fill short forecast gaps only; long gaps stay NaN -> day skipped
+        if col != "price":
             s = s.interpolate(limit=max_gap_hours, limit_area="inside")
         w = s.unstack("hour")
         w.index = pd.DatetimeIndex(pd.to_datetime(w.index), name="date")
@@ -37,7 +27,9 @@ def load_wide(path: str, max_gap_hours: int = 6) -> dict[str, pd.DataFrame]:
     return wide
 
 
-def design_matrix(wide: dict[str, pd.DataFrame], res_lags=EXOG_LAGS) -> tuple[pd.DataFrame, pd.DataFrame]:
+def design_matrix(
+    wide: dict[str, pd.DataFrame], res_lags=EXOG_LAGS
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """X row for date D uses only information available at 12:00 on D-1.
 
     res_lags=(1, 7) drops the wind/solar forecast for D itself (leakage check, Week 4).
@@ -52,7 +44,6 @@ def design_matrix(wide: dict[str, pd.DataFrame], res_lags=EXOG_LAGS) -> tuple[pd
     return pd.concat(blocks + [dow], axis=1), P
 
 
-# ------------------------------------------------------------------- transformation
 class AsinhScaler:
     """z = asinh((x - median) / MAD). Robust to spikes and handles negative prices."""
 
@@ -70,7 +61,6 @@ class AsinhScaler:
         return np.sinh(z) * self.mad + self.med
 
 
-# ----------------------------------------------------------------------------- models
 def naive_forecast(P: pd.DataFrame, dates: pd.DatetimeIndex) -> pd.DataFrame:
     out = {}
     for d in dates:
@@ -87,13 +77,15 @@ def _fit_window(X: pd.DataFrame, Y: pd.DataFrame, d0: pd.Timestamp, window: int)
     ok = Xt.notna().all(axis=1) & Yt.notna().all(axis=1)
     Xt, Yt = Xt[ok].to_numpy(), Yt[ok].to_numpy()
     n_dummies = sum(c.startswith("dow") for c in X.columns)
-    if len(Xt) < Xt.shape[1] + 10:  # LassoLarsIC's AIC needs n_samples > n_features
+    if len(Xt) < Xt.shape[1] + 10:
         return None
     xs = AsinhScaler().fit(Xt[:, :-n_dummies])
     ys = AsinhScaler().fit(Yt)
     Z = np.hstack([xs.transform(Xt[:, :-n_dummies]), Xt[:, -n_dummies:]])
     Zy = ys.transform(Yt)
-    models = [LassoLarsIC(criterion="aic", max_iter=2500).fit(Z, Zy[:, h]) for h in range(24)]
+    models = [
+        LassoLarsIC(criterion="aic", max_iter=2500).fit(Z, Zy[:, h]) for h in range(24)
+    ]
 
     def predict(x_row: np.ndarray) -> np.ndarray:
         z = np.hstack([xs.transform(x_row[:-n_dummies]), x_row[-n_dummies:]])[None, :]
@@ -105,20 +97,25 @@ def _fit_window(X: pd.DataFrame, Y: pd.DataFrame, d0: pd.Timestamp, window: int)
 
 def _lear_block(X, Y, days, windows):
     """Recalibrate once at days[0], forecast every day in the block."""
-    predictors = [p for w in windows if (p := _fit_window(X, Y, days[0], w)) is not None]
+    predictors = [
+        p for w in windows if (p := _fit_window(X, Y, days[0], w)) is not None
+    ]
     rows = {}
     for d in days:
         x = X.loc[d].to_numpy(dtype=float)
         if not predictors or np.isnan(x).any():
             rows[d] = np.full(24, np.nan)
-        else:  # ensemble = mean over calibration windows
+        else:
             rows[d] = np.mean([p(x) for p in predictors], axis=0)
     return rows
 
 
-def lear_forecast(X, Y, dates, windows=(364, 728, 1092), recal_every=1, n_jobs=-1, verbose=5):
-    blocks = [dates[i:i + recal_every] for i in range(0, len(dates), recal_every)]
+def lear_forecast(
+    X, Y, dates, windows=(364, 728, 1092), recal_every=1, n_jobs=-1, verbose=5
+):
+    blocks = [dates[i : i + recal_every] for i in range(0, len(dates), recal_every)]
     results = Parallel(n_jobs=n_jobs, verbose=verbose)(
-        delayed(_lear_block)(X, Y, b, windows) for b in blocks)
+        delayed(_lear_block)(X, Y, b, windows) for b in blocks
+    )
     rows = {d: r for res in results for d, r in res.items()}
     return pd.DataFrame.from_dict(rows, orient="index", columns=Y.columns)

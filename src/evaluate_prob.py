@@ -1,21 +1,5 @@
-"""
-Week 3 evaluation: LightGBM quantiles vs LEAR, point and probabilistic.
+"Week 3 evaluation: LightGBM quantiles vs LEAR, point and probabilistic."
 
-Usage (run src.evaluate first, it produces data/forecasts/<zone>_lear.parquet):
-    python -m src.evaluate_prob --zone DK_1 --test-start 2024-09-01 --test-end 2026-08-31
-
-Models compared
-  * naive / LEAR           : point benchmarks (Week 2)
-  * LEAR-EQ                : LEAR + empirical quantiles of its own past errors
-                             (same hour, last `cal_days` days) -> probabilistic benchmark
-  * LGBM                   : raw LightGBM quantiles
-  * LGBM-CQR               : conformalized quantile regression (Romano et al., 2019),
-                             calibrated on LGBM's own past out-of-sample errors
-  * ENS                    : 50/50 quantile average of LEAR-EQ and LGBM-CQR
-
-Every calibration step for day D uses only days <= D-1, whose prices are known
-at gate closure, so the whole procedure stays leakage-free.
-"""
 import argparse
 import time
 from pathlib import Path
@@ -29,7 +13,6 @@ FC_DIR = Path("data/forecasts")
 INTERVALS = {50: ("q0.25", "q0.75"), 80: ("q0.10", "q0.90"), 90: ("q0.05", "q0.95")}
 
 
-# ----------------------------------------------------------------------- utilities
 def wide_to_long(w: pd.DataFrame, name: str) -> pd.Series:
     w = w.copy()
     w.columns = w.columns.astype(int)
@@ -44,8 +27,9 @@ def lear_eq(lear: pd.Series, y: pd.Series, cal_days: int) -> pd.DataFrame:
     point = lear.unstack("hour").asfreq("D")
     out = {}
     for q, col in zip(QUANTILES, QCOLS):
-        # quantile of errors over the previous cal_days days (shift(1) => only past days)
-        eq = err.rolling(cal_days, min_periods=int(0.75 * cal_days)).quantile(q).shift(1)
+        eq = (
+            err.rolling(cal_days, min_periods=int(0.75 * cal_days)).quantile(q).shift(1)
+        )
         out[col] = (point + eq).stack()
     df = pd.DataFrame(out)
     df.index = df.index.set_names(["date", "hour"])
@@ -59,11 +43,13 @@ def cqr(fc: pd.DataFrame, y: pd.Series, cal_days: int) -> pd.DataFrame:
     udates = pd.DatetimeIndex(dates.unique()).sort_values()
     for level, (lo, hi) in INTERVALS.items():
         alpha = 1 - level / 100
-        score = np.maximum(fc[lo] - y, y - fc[hi])           # CQR conformity score
+        score = np.maximum(fc[lo] - y, y - fc[hi])
         daily = score.groupby(level="date").apply(lambda s: s.to_numpy())
         for d in udates:
-            past = daily.loc[(daily.index >= d - pd.Timedelta(days=cal_days)) &
-                             (daily.index <= d - pd.Timedelta(days=1))]
+            past = daily.loc[
+                (daily.index >= d - pd.Timedelta(days=cal_days))
+                & (daily.index <= d - pd.Timedelta(days=1))
+            ]
             s = np.concatenate(past.to_numpy()) if len(past) else np.array([])
             s = s[~np.isnan(s)]
             m = dates == d
@@ -85,14 +71,15 @@ def ensemble(*fcs: pd.DataFrame) -> pd.DataFrame:
     return sum(f.loc[idx] for f in fcs) / len(fcs)
 
 
-def build_prob_models(y: pd.Series, lear: pd.Series, lgbm_q: pd.DataFrame, cal_days: int):
+def build_prob_models(
+    y: pd.Series, lear: pd.Series, lgbm_q: pd.DataFrame, cal_days: int
+):
     """LEAR-EQ, LGBM-CQR and their 50/50 ensemble from raw forecasts."""
     eq = lear_eq(lear, y.reindex(lear.index), cal_days)
     fc_cqr = cqr(lgbm_q, y.loc[lgbm_q.index], cal_days)
     return eq, fc_cqr, ensemble(eq, fc_cqr)
 
 
-# ------------------------------------------------------------------------ metrics
 def pinball(y: np.ndarray, fc: pd.DataFrame) -> float:
     losses = []
     for q, c in zip(QUANTILES, QCOLS):
@@ -117,21 +104,28 @@ def report(y, point: dict[str, pd.Series], prob: dict[str, pd.DataFrame]) -> Non
     for f in prob.values():
         common = common.intersection(f.dropna().index)
     d = common.get_level_values("date")
-    print(f"\nEvaluation: {d.nunique()} days ({d.min().date()} -> {d.max().date()}), "
-          f"{len(common):,} hours")
+    print(
+        f"\nEvaluation: {d.nunique()} days ({d.min().date()} -> {d.max().date()}), "
+        f"{len(common):,} hours"
+    )
     yv = y.loc[common].to_numpy()
 
     naive_mae = np.mean(np.abs(point["naive"].loc[common].to_numpy() - yv))
     rows = {}
     for k, s in point.items():
         e = s.loc[common].to_numpy() - yv
-        rows[k] = {"MAE": np.mean(np.abs(e)), "RMSE": np.sqrt(np.mean(e ** 2)),
-                   "rMAE": np.mean(np.abs(e)) / naive_mae}
+        rows[k] = {
+            "MAE": np.mean(np.abs(e)),
+            "RMSE": np.sqrt(np.mean(e**2)),
+            "rMAE": np.mean(np.abs(e)) / naive_mae,
+        }
     print("\n== Point forecasts (EUR/MWh) ==")
     print(pd.DataFrame(rows).T.round(3))
 
-    rows = {k: {"pinball": pinball(yv, f.loc[common]), **interval_stats(yv, f.loc[common])}
-            for k, f in prob.items()}
+    rows = {
+        k: {"pinball": pinball(yv, f.loc[common]), **interval_stats(yv, f.loc[common])}
+        for k, f in prob.items()
+    }
     print("\n== Probabilistic (pinball in EUR/MWh; nominal coverage 50/80/90%) ==")
     print(pd.DataFrame(rows).T.round(2))
 
@@ -140,8 +134,12 @@ def report(y, point: dict[str, pd.Series], prob: dict[str, pd.DataFrame]) -> Non
     for p in q.unique():
         m = q == p
         rows[str(p)] = {k: pinball(yv[m], f.loc[common][m]) for k, f in prob.items()}
-        rows[str(p)].update({f"cov90_{k}": interval_stats(yv[m], prob[k].loc[common][m])["cov90_%"]
-                             for k in ("LGBM", "LGBM-CQR")})
+        rows[str(p)].update(
+            {
+                f"cov90_{k}": interval_stats(yv[m], prob[k].loc[common][m])["cov90_%"]
+                for k in ("LGBM", "LGBM-CQR")
+            }
+        )
     print("\n== Pinball loss and 90% coverage by quarter ==")
     print(pd.DataFrame(rows).T.round(2))
 
@@ -155,15 +153,20 @@ if __name__ == "__main__":
     ap.add_argument("--recal-every", type=int, default=7)
     ap.add_argument("--cal-days", type=int, default=56)
     ap.add_argument("--n-jobs", type=int, default=-1)
-    ap.add_argument("--reuse", action="store_true",
-                    help="reuse saved LightGBM quantiles instead of refitting")
+    ap.add_argument(
+        "--reuse",
+        action="store_true",
+        help="reuse saved LightGBM quantiles instead of refitting",
+    )
     a = ap.parse_args()
 
     df = load_long(f"data/processed/{a.zone}_dataset.parquet")
     y = df["price"]
     dates = pd.date_range(a.test_start, a.test_end, freq="D")
-    print(f"LightGBM: {len(QUANTILES)} quantiles, window {a.window} d, "
-          f"refit every {a.recal_every} d, {len(dates)} test days")
+    print(
+        f"LightGBM: {len(QUANTILES)} quantiles, window {a.window} d, "
+        f"refit every {a.recal_every} d, {len(dates)} test days"
+    )
 
     if a.reuse:
         fc, importance = pd.read_parquet(FC_DIR / f"{a.zone}_lgbm_q.parquet"), None
@@ -182,11 +185,22 @@ if __name__ == "__main__":
     for name, f in {"lear_eq": eq, "lgbm_cqr": fc_cqr, "ens": ens}.items():
         f.to_parquet(FC_DIR / f"{a.zone}_{name}.parquet")
 
-    report(y_test,
-           point={"naive": naive, "lear": lear, "lgbm_median": fc["q0.50"],
-                  "ens_median": ens["q0.50"]},
-           prob={"LEAR-EQ": eq, "LGBM": fc, "LGBM-CQR": fc_cqr, "ENS": ens})
+    report(
+        y_test,
+        point={
+            "naive": naive,
+            "lear": lear,
+            "lgbm_median": fc["q0.50"],
+            "ens_median": ens["q0.50"],
+        },
+        prob={"LEAR-EQ": eq, "LGBM": fc, "LGBM-CQR": fc_cqr, "ENS": ens},
+    )
 
     if importance is not None:
         print("\n== Top 15 features (median model, last refit, share of gain %) ==")
-        print((100 * importance / importance.sum()).sort_values(ascending=False).head(15).round(1))
+        print(
+            (100 * importance / importance.sum())
+            .sort_values(ascending=False)
+            .head(15)
+            .round(1)
+        )
